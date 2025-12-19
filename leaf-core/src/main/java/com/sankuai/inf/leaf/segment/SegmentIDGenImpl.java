@@ -4,7 +4,9 @@ import com.sankuai.inf.leaf.IDGen;
 import com.sankuai.inf.leaf.common.Result;
 import com.sankuai.inf.leaf.common.Status;
 import com.sankuai.inf.leaf.segment.dao.IDAllocDao;
-import com.sankuai.inf.leaf.segment.model.*;
+import com.sankuai.inf.leaf.segment.model.LeafAlloc;
+import com.sankuai.inf.leaf.segment.model.Segment;
+import com.sankuai.inf.leaf.segment.model.SegmentBuffer;
 import org.perf4j.StopWatch;
 import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
@@ -37,9 +39,9 @@ public class SegmentIDGenImpl implements IDGen {
      * 一个Segment维持时间为15分钟
      */
     private static final long SEGMENT_DURATION = 15 * 60 * 1000L;
-    private ExecutorService service = new ThreadPoolExecutor(5, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new UpdateThreadFactory());
+    private final ExecutorService service = new ThreadPoolExecutor(5, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new UpdateThreadFactory());
     private volatile boolean initOK = false;
-    private Map<String, SegmentBuffer> cache = new ConcurrentHashMap<String, SegmentBuffer>();
+    private final Map<String, SegmentBuffer> cache = new ConcurrentHashMap<String, SegmentBuffer>();
     private IDAllocDao dao;
 
     public static class UpdateThreadFactory implements ThreadFactory {

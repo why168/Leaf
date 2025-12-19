@@ -2,23 +2,23 @@ package com.sankuai.inf.leaf.snowflake;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Maps;
+import com.sankuai.inf.leaf.common.PropertyFactory;
 import com.sankuai.inf.leaf.snowflake.exception.CheckLastTimeException;
 import org.apache.commons.io.FileUtils;
+import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.RetryUntilElapsed;
+import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Maps;
-import com.sankuai.inf.leaf.common.*;
-import org.apache.curator.RetryPolicy;
-import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.zookeeper.CreateMode;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -34,9 +34,9 @@ public class SnowflakeZookeeperHolder {
     private static final String PREFIX_ZK_PATH = "/snowflake/" + PropertyFactory.getProperties().getProperty("leaf.name");
     private static final String PROP_PATH = System.getProperty("java.io.tmpdir") + File.separator + PropertyFactory.getProperties().getProperty("leaf.name") + "/leafconf/{port}/workerID.properties";
     private static final String PATH_FOREVER = PREFIX_ZK_PATH + "/forever";//保存所有数据持久的节点
-    private String ip;
-    private String port;
-    private String connectionString;
+    private final String ip;
+    private final String port;
+    private final String connectionString;
     private long lastUpdateTime;
 
     public SnowflakeZookeeperHolder(String ip, String port, String connectionString) {
@@ -192,7 +192,7 @@ public class SnowflakeZookeeperHolder {
         LOGGER.info("file exists status is {}", exists);
         if (exists) {
             try {
-                FileUtils.writeStringToFile(leafConfFile, "workerID=" + workerID, false);
+                FileUtils.writeStringToFile(leafConfFile, "workerID=" + workerID, Charset.defaultCharset(), false);
                 LOGGER.info("update file cache workerID is {}", workerID);
             } catch (IOException e) {
                 LOGGER.error("update file cache error ", e);
@@ -204,7 +204,7 @@ public class SnowflakeZookeeperHolder {
                 LOGGER.info("init local file cache create parent dis status is {}, worker id is {}", mkdirs, workerID);
                 if (mkdirs) {
                     if (leafConfFile.createNewFile()) {
-                        FileUtils.writeStringToFile(leafConfFile, "workerID=" + workerID, false);
+                        FileUtils.writeStringToFile(leafConfFile, "workerID=" + workerID, Charset.defaultCharset(), false);
                         LOGGER.info("local file cache workerID is {}", workerID);
                     }
                 } else {
