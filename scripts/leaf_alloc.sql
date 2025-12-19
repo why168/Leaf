@@ -5,6 +5,7 @@ CREATE TABLE `leaf_alloc` (
   `max_id` bigint(20) NOT NULL DEFAULT '1',
   `step` int(11) NOT NULL,
   `description` varchar(256)  DEFAULT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`biz_tag`)
 ) ENGINE=InnoDB;

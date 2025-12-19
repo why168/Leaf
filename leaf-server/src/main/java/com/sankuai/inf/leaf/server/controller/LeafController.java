@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class LeafController {
-    private Logger logger = LoggerFactory.getLogger(LeafController.class);
+    private final static Logger logger = LoggerFactory.getLogger(LeafController.class);
 
     @Autowired
     private SegmentService segmentService;

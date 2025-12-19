@@ -6,9 +6,9 @@ import com.sankuai.inf.leaf.common.PropertyFactory;
 import com.sankuai.inf.leaf.common.Result;
 import com.sankuai.inf.leaf.segment.dao.IDAllocDao;
 import com.sankuai.inf.leaf.segment.dao.impl.IDAllocDaoImpl;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -17,7 +17,8 @@ import java.util.Properties;
 public class IDGenServiceTest {
     IDGen idGen;
     DruidDataSource dataSource;
-    @Before
+
+    @BeforeEach
     public void before() throws IOException, SQLException {
         // Load Db Config
         Properties properties = PropertyFactory.getProperties();
@@ -37,6 +38,7 @@ public class IDGenServiceTest {
         ((SegmentIDGenImpl) idGen).setDao(dao);
         idGen.init();
     }
+
     @Test
     public void testGetId() {
         for (int i = 0; i < 100; ++i) {
@@ -44,9 +46,10 @@ public class IDGenServiceTest {
             System.out.println(r);
         }
     }
-    @After
+
+    @AfterEach
     public void after() {
-       dataSource.close();
+        dataSource.close();
     }
 
 }

@@ -2,14 +2,11 @@ package com.sankuai.inf.leaf.segment;
 
 import com.sankuai.inf.leaf.IDGen;
 import com.sankuai.inf.leaf.common.Result;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:applicationContext.xml"}) //加载配置文件
+@SpringJUnitConfig(locations = {"classpath:applicationContext.xml"})
 public class SpringIDGenServiceTest {
     @Autowired
     IDGen idGen;
