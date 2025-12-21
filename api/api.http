@@ -1,0 +1,82 @@
+### ============================================================
+### Leaf 分布式ID生成服务 - API 接口文档
+### ============================================================
+### 基础地址配置
+@baseUrl = http://localhost:8080
+@your-biz-tag = leaf-segment-test
+
+
+### ============================================================
+### 号段模式 (Segment Mode)
+### ============================================================
+### 需要先配置: leaf.segment.enable=true 并配置数据库连接
+
+### 获取号段模式 ID - 测试业务
+### 返回: 分布式唯一ID (如: 1001)
+GET {{baseUrl}}/api/segment/get/leaf-segment-test
+
+### 获取号段模式 ID - 自定义业务标签
+### 替换 {your-biz-tag} 为数据库 leaf_alloc 表中配置的 biz_tag
+GET {{baseUrl}}/api/segment/get/{{your-biz-tag}}
+
+
+### ============================================================
+### Snowflake模式 (Snowflake Mode)
+### ============================================================
+### 需要先配置: leaf.snowflake.enable=true 并配置 ZooKeeper 地址
+
+### 获取 Snowflake ID - 测试
+### 返回: 64位分布式唯一ID (如: 1234567890123456789)
+GET {{baseUrl}}/api/snowflake/get/test
+
+### 获取 Snowflake ID - 自定义业务标签
+### key 参数在 Snowflake 模式下仅用于日志记录，不影响ID生成
+GET {{baseUrl}}/api/snowflake/get/{{your-biz-tag}
+
+
+### ============================================================
+### 监控接口 (Monitor APIs)
+### ============================================================
+
+### 查看号段模式缓存状态 (HTML页面)
+### 显示各业务号段的缓存使用情况
+GET {{baseUrl}}/cache
+
+### 查看数据库号段配置 (HTML页面)
+### 显示 leaf_alloc 表中的所有配置
+GET {{baseUrl}}/db
+
+### 解析 Snowflake ID
+### 将 Snowflake ID 解析为: timestamp(时间戳), workerId(机器ID), sequenceId(序列号)
+### 返回示例:
+### {
+###   "timestamp": "1567733700834(2019-09-06 09:35:00.834)",
+###   "workerId": "39",
+###   "sequenceId": "3448"
+### }
+GET {{baseUrl}}/decodeSnowflakeId?snowflakeId=1234567890123456789
+
+
+### ============================================================
+### 批量测试示例
+### ============================================================
+
+### 连续获取多个号段ID (用于测试)
+GET {{baseUrl}}/api/segment/get/leaf-segment-test
+
+###
+GET {{baseUrl}}/api/segment/get/leaf-segment-test
+
+###
+GET {{baseUrl}}/api/segment/get/leaf-segment-test
+
+
+### ============================================================
+### 错误场景测试
+### ============================================================
+
+### 测试空 key (预期返回错误)
+GET {{baseUrl}}/api/segment/get/
+
+### 测试不存在的业务标签 (预期返回错误)
+GET {{baseUrl}}/api/segment/get/non-existent-biz-tag
